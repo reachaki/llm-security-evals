@@ -2,7 +2,7 @@
 
 __version__ = "0.1.0"
 
-from llm_security_evals.loader import TestCase, load_attack_dataset
+from llm_security_evals.loader import SecurityTestCase, load_attack_dataset
 
-__all__ = ["TestCase", "load_attack_dataset"]
+__all__ = ["SecurityTestCase", "load_attack_dataset"]
 

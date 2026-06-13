@@ -7,7 +7,7 @@ from typing import Any, Dict, List
 
 
 @dataclass
-class TestCase:
+class SecurityTestCase:
     id: str
     category: str
     title: str
@@ -16,8 +16,8 @@ class TestCase:
     severity: str
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "TestCase":
-        """Create a TestCase from a dictionary, validating all required fields."""
+    def from_dict(cls, data: Dict[str, Any]) -> "SecurityTestCase":
+        """Create a SecurityTestCase from a dictionary, validating all required fields."""
         required_fields = [
             "id",
             "category",
@@ -49,7 +49,7 @@ def get_default_dataset_path() -> str:
     return os.path.join(base_dir, "data", "prompts", "sample_attacks.json")
 
 
-def load_attack_dataset(file_path: str = None) -> List[TestCase]:
+def load_attack_dataset(file_path: str = None) -> List[SecurityTestCase]:
     """Load, parse, and validate the attack prompts dataset."""
     if file_path is None:
         file_path = get_default_dataset_path()
@@ -72,6 +72,6 @@ def load_attack_dataset(file_path: str = None) -> List[TestCase]:
             raise ValueError(
                 f"Test case at index {index} must be a JSON object"
             )
-        test_cases.append(TestCase.from_dict(item))
+        test_cases.append(SecurityTestCase.from_dict(item))
 
     return test_cases
