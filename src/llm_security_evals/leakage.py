@@ -23,6 +23,16 @@ class LeakageResult:
     risk_level: str
     explanation: str
 
+    def to_dict(self) -> dict:
+        """Convert result to a structured dictionary representation."""
+        return {
+            "detected": self.detected,
+            "detector_name": self.detector_name,
+            "matched_pattern_labels": self.matched_pattern_labels,
+            "risk_level": self.risk_level,
+            "explanation": self.explanation,
+        }
+
 
 class ResponseLeakageDetector:
     """Validator for identifying fake credentials and system prompts in responses."""
