@@ -6,7 +6,7 @@ from llm_security_evals.loader import SecurityTestCase, load_attack_dataset
 from llm_security_evals.model import MockModel
 from llm_security_evals.runner import EvaluationRunner
 from llm_security_evals.scorer import score_response
-from llm_security_evals.detectors import DetectorResult, PromptInjectionDetector
+from llm_security_evals.detectors import DetectorResult, PromptInjectionDetector, JailbreakDetector
 
 __all__ = [
     "SecurityTestCase",
@@ -16,6 +16,7 @@ __all__ = [
     "score_response",
     "DetectorResult",
     "PromptInjectionDetector",
+    "JailbreakDetector",
 ]
 
 
