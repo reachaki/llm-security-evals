@@ -5,6 +5,7 @@ from llm_security_evals.loader import load_attack_dataset
 from llm_security_evals.model import MockModel
 from llm_security_evals.scorer import score_response
 from llm_security_evals.detectors import PromptInjectionDetector, JailbreakDetector
+from llm_security_evals.leakage import ResponseLeakageDetector
 
 
 class EvaluationRunner:
@@ -18,6 +19,7 @@ class EvaluationRunner:
         """Run the evaluation dataset and return a summary of findings."""
         injection_detector = PromptInjectionDetector()
         jailbreak_detector = JailbreakDetector()
+        leakage_detector = ResponseLeakageDetector()
 
         test_cases = load_attack_dataset(file_path)
         results = []
@@ -32,6 +34,9 @@ class EvaluationRunner:
             response = self.model.generate(case.prompt)
             is_safe = score_response(response, case.category)
             result_status = "pass" if is_safe else "fail"
+
+            # Validate the response for data leakage
+            leakage_res = leakage_detector.validate(response)
 
             if is_safe:
                 passed_count += 1
@@ -64,6 +69,7 @@ class EvaluationRunner:
                             "explanation": jailbreak_res.explanation,
                         },
                     },
+                    "leakage_validation": leakage_res.to_dict(),
                 }
             )
 
