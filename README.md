@@ -8,11 +8,11 @@ As large language models are integrated into production applications, they inter
 
 ## Current Release
 
-This release contains the sample attack dataset and local loader configuration. The framework now provides a baseline of security prompts and validation tools to verify incoming test sets.
+This release contains the sample attack dataset, local mock model, scoring logic, and evaluation runner. The framework now provides tools to load security prompts, simulate model responses locally, score those responses, and aggregate the findings into summary reports.
 
 ### Project Structure
 
-- `src/llm_security_evals/`: Core source directory for testing logic, loaders, and runners.
+- `src/llm_security_evals/`: Core source directory for testing logic, loaders, models, scorers, and runners.
 - `tests/`: Project test suite.
 - `data/prompts/`: Standardized prompt templates for security testing.
 - `docs/`: Framework documentation.
@@ -55,6 +55,39 @@ print(f"Category: {first_case.category}")
 print(f"Prompt: {first_case.prompt}")
 ```
 
+## Running Local Evaluations
+
+You can simulate security evaluations using the mock model adapter and the evaluation runner.
+
+The `MockModel` supports three execution modes:
+- `safe`: The model refuses to comply with malicious instructions, generating safe outputs.
+- `unsafe`: The model complies with adversarial overrides, leaking credentials or executing payloads.
+- `mixed`: The model generates safe responses for some prompts and complies with others.
+
+### Code Example
+
+```python
+from llm_security_evals import MockModel, EvaluationRunner
+
+# Initialize a mock model in mixed mode
+model = MockModel(mode="mixed")
+
+# Create a runner for the model
+runner = EvaluationRunner(model)
+
+# Run the local security evaluation
+report = runner.run_eval()
+
+# Print the final score summary
+print(f"Total Runs: {report['total']}")
+print(f"Passed: {report['passed']}")
+print(f"Failed: {report['failed']}")
+
+# Print detailed results
+for result in report["results"]:
+    print(f"[{result['id']}] {result['category']} - {result['result']}")
+```
+
 ## Installation and Testing
 
 ### Prerequisites
@@ -72,8 +105,8 @@ python -m pytest
 ## Planned Milestones
 
 1. **Milestone 1**: Project setup, package configuration, and README.
-2. **Milestone 2 (Current)**: Attack dataset and loader implementation.
-3. **Milestone 3**: Core evaluation engine and template runners.
+2. **Milestone 2**: Attack dataset and loader implementation.
+3. **Milestone 3 (Current)**: Mock model, scoring logic, and evaluation runner.
 4. **Milestone 4**: Detection mechanisms for prompt injection and jailbreak attacks.
 5. **Milestone 5**: Data leakage detection rules and validators.
 6. **Milestone 6**: Interactive tool-use simulation and sandboxed environment tests.
