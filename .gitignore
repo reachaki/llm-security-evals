@@ -39,3 +39,14 @@ env/
 .pytest_cache/
 .coverage
 htmlcov/
+
+AGENTS.md
+.agent/
+*.local.md
+
+.agent/
+AGENTS.md
+.DS_Store
+*.local.md
+
+results/
