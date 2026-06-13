@@ -6,7 +6,15 @@ from typing import List
 
 @dataclass
 class DetectorResult:
-    """Structured result containing evaluation from a security detector."""
+    """Structured result containing evaluation from a security detector.
+
+    Fields:
+        detected: True if a pattern was flagged, False otherwise.
+        detector_name: The name of the detector that performed the scan.
+        matched_patterns: A list of patterns that triggered the detection.
+        risk_level: The security risk level (high, medium, low, or none).
+        explanation: A user-facing description of the detection result.
+    """
 
     detected: bool
     detector_name: str
