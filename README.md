@@ -8,11 +8,11 @@ As large language models are integrated into production applications, they inter
 
 ## Current Release
 
-This release contains the sample attack dataset, local mock model, scoring logic, and evaluation runner. The framework now provides tools to load security prompts, simulate model responses locally, score those responses, and aggregate the findings into summary reports.
+This release contains the sample attack dataset, local mock model, scoring logic, evaluation runner, and local prompt detectors. The framework now provides tools to load security prompts, scan inputs for prompt injection and jailbreak patterns locally before execution, simulate model responses, and generate summary reports.
 
 ### Project Structure
 
-- `src/llm_security_evals/`: Core source directory for testing logic, loaders, models, scorers, and runners.
+- `src/llm_security_evals/`: Core source directory for loaders, models, scorers, detectors, and runners.
 - `tests/`: Project test suite.
 - `data/prompts/`: Standardized prompt templates for security testing.
 - `docs/`: Framework documentation.
@@ -54,6 +54,22 @@ print(f"ID: {first_case.id}")
 print(f"Category: {first_case.category}")
 print(f"Prompt: {first_case.prompt}")
 ```
+
+## Prompt and Jailbreak Detection
+
+This framework includes local detectors to analyze incoming prompts for potential exploits before they reach the model.
+
+### Available Detectors
+- **Prompt Injection Detector**: Identifies phrases designed to override original instructions (e.g. "ignore all instructions" or "system override").
+- **Jailbreak Detector**: Identifies roleplay or guideline bypass patterns (e.g. "act as dan" or "unrestricted mode").
+
+### Why Pre-execution Detection Matters
+Detecting malicious prompts before they reach the model allows applications to block attacks at the boundary. This approach saves token processing costs and prevents models from generating unsafe content in response to adversarial inputs.
+
+### Limitations of Pattern-based Detection
+- **Evasion**: Attackers can easily bypass exact string matching by using character substitutions, translation, or obfuscation.
+- **False Positives**: General prompts discussing safety or containing similar strings may be incorrectly flagged.
+- **Context Ignorance**: Pattern matching does not evaluate the semantic context of the prompt, meaning complex injections might go unnoticed.
 
 ## Running Local Evaluations
 
@@ -106,7 +122,7 @@ python -m pytest
 
 1. **Milestone 1**: Project setup, package configuration, and README.
 2. **Milestone 2**: Attack dataset and loader implementation.
-3. **Milestone 3 (Current)**: Mock model, scoring logic, and evaluation runner.
-4. **Milestone 4**: Detection mechanisms for prompt injection and jailbreak attacks.
+3. **Milestone 3**: Mock model, scoring logic, and evaluation runner.
+4. **Milestone 4 (Current)**: Local prompt injection and jailbreak detectors.
 5. **Milestone 5**: Data leakage detection rules and validators.
 6. **Milestone 6**: Interactive tool-use simulation and sandboxed environment tests.
